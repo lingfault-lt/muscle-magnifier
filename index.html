@@ -228,27 +228,50 @@
 
     .stepper-grid {
       display: grid;
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(210px, 1fr));
+      gap: 10px 14px;
     }
 
     .stepper-row {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 134px;
-      gap: 12px;
-      align-items: center;
-      min-height: 52px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--line);
+      gap: 8px;
+      align-content: start;
+      min-height: 72px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfbfd;
     }
 
     .stepper-row:last-child {
-      border-bottom: 0;
+      border-bottom: 1px solid var(--line);
     }
 
     .stepper-row label {
       color: var(--text);
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.35;
+    }
+
+    .names-field {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 160px;
+      gap: 10px;
+      align-items: end;
+      min-height: auto;
+    }
+
+    .name-count {
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      background: white;
+      font-size: 13px;
+      white-space: nowrap;
     }
 
     .stepper {
@@ -524,12 +547,14 @@
 
     .editor {
       display: grid;
-      gap: 12px;
+      gap: 0;
+      max-height: 804px;
+      overflow: hidden;
     }
 
     .editor-head,
     .dash-head {
-      padding: 18px 20px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--line);
       display: flex;
       justify-content: space-between;
@@ -540,20 +565,25 @@
 
     .editor-body,
     .dash-body {
-      padding: 20px;
+      padding: 16px;
+    }
+
+    .editor .table-wrap {
+      max-height: 170px;
+      overflow: auto;
     }
 
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(180px, 1fr));
-      gap: 14px;
+      gap: 10px;
     }
 
     .actions {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-top: 16px;
+      margin-top: 12px;
     }
 
     .kpis {
@@ -622,9 +652,9 @@
     th,
     td {
       text-align: left;
-      padding: 13px 14px;
+      padding: 10px 12px;
       border-bottom: 1px solid var(--line);
-      font-size: 14px;
+      font-size: 13px;
       white-space: nowrap;
     }
 
@@ -681,6 +711,14 @@
         grid-template-columns: 1fr;
       }
 
+      .stepper-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .names-field {
+        grid-template-columns: 1fr;
+      }
+
       .phone {
         position: static;
         max-width: 390px;
@@ -726,7 +764,8 @@
 
       .form-grid,
       .metrics,
-      .kpis {
+      .kpis,
+      .stepper-grid {
         grid-template-columns: 1fr;
       }
 
@@ -832,8 +871,9 @@
                     <div class="stat"><strong id="breakZeroOfficeTotal">0</strong><span>破零供电所数量</span></div>
                     <div class="stat"><strong id="leaderResearchTotal">0</strong><span>挂点下所调研次数</span></div>
                     <div class="stat"><strong id="talkPeopleTotal">0</strong><span>一对一谈话人数</span></div>
-                    <div class="stat"><strong id="signOffTotal">0</strong><span>签字把关次数</span></div>
-                    <div class="stat"><strong id="assessedEmployeesTotal">0</strong><span>受考评员工数量</span></div>
+                    <div class="stat"><strong id="branchSecretaryTotal">0</strong><span>专职支部书记供电所数</span></div>
+                    <div class="stat"><strong id="supervisorTotal">0</strong><span>廉洁监督员人数</span></div>
+                    <div class="stat"><strong id="assessmentPeriodsTotal">0</strong><span>清廉指数考评期数</span></div>
                     <div class="stat"><strong id="fiveOnceTotal">0</strong><span>累计开展五个一次数</span></div>
                   </div>
                 </div>
@@ -877,12 +917,19 @@
                     <div class="stepper"><button type="button" data-step="talkPeopleCount" data-delta="-1">−</button><input id="talkPeopleCount" type="number" min="0" value="0" required><button type="button" data-step="talkPeopleCount" data-delta="1">+</button></div>
                   </div>
                   <div class="stepper-row">
-                    <label for="signOffCount">廉洁监督员“签字把关”次数</label>
-                    <div class="stepper"><button type="button" data-step="signOffCount" data-delta="-1">−</button><input id="signOffCount" type="number" min="0" value="0" required><button type="button" data-step="signOffCount" data-delta="1">+</button></div>
+                    <label for="branchSecretaryCount">供电所专职支部书记</label>
+                    <div class="stepper"><button type="button" data-step="branchSecretaryCount" data-delta="-1">−</button><input id="branchSecretaryCount" type="number" min="0" max="1" value="0" required><button type="button" data-step="branchSecretaryCount" data-delta="1">+</button></div>
+                  </div>
+                  <div class="stepper-row names-field">
+                    <div class="field">
+                      <label for="supervisorNames">廉洁监督员姓名</label>
+                      <input id="supervisorNames" placeholder="多名用顿号、逗号或空格隔开">
+                    </div>
+                    <div class="name-count" id="supervisorNameCount">已填 0 人</div>
                   </div>
                   <div class="stepper-row">
-                    <label for="assessedEmployeesCount">受到清廉指数考评供电所员工数量</label>
-                    <div class="stepper"><button type="button" data-step="assessedEmployeesCount" data-delta="-1">−</button><input id="assessedEmployeesCount" type="number" min="0" value="0" required><button type="button" data-step="assessedEmployeesCount" data-delta="1">+</button></div>
+                    <label for="assessmentPeriodsCount">累计开展清廉指数考评期数</label>
+                    <div class="stepper"><button type="button" data-step="assessmentPeriodsCount" data-delta="-1">−</button><input id="assessmentPeriodsCount" type="number" min="0" value="0" required><button type="button" data-step="assessmentPeriodsCount" data-delta="1">+</button></div>
                   </div>
                   <div class="stepper-row">
                     <label for="fiveOnceCount">累计开展五个一次数</label>
@@ -903,8 +950,9 @@
                       <th>第一种形态人次数</th>
                       <th>挂点调研</th>
                       <th>一对一谈话</th>
-                      <th>签字把关</th>
-                      <th>受考评员工数量</th>
+                      <th>专职支部书记</th>
+                      <th>廉洁监督员</th>
+                      <th>清廉指数考评期数</th>
                       <th>累计开展五个一次数</th>
                       <th>操作</th>
                     </tr>
@@ -946,8 +994,9 @@
               <div class="kpi"><strong id="cityBreakZeroOfficeTotal">0</strong><span>破零供电所数量</span></div>
               <div class="kpi"><strong id="cityLeaderResearchTotal">0</strong><span>挂点调研次数</span></div>
               <div class="kpi"><strong id="cityTalkPeopleTotal">0</strong><span>一对一谈话人数</span></div>
-              <div class="kpi"><strong id="citySignOffTotal">0</strong><span>签字把关次数</span></div>
-              <div class="kpi"><strong id="cityAssessedEmployeesTotal">0</strong><span>受考评员工数量</span></div>
+              <div class="kpi"><strong id="cityBranchSecretaryTotal">0</strong><span>专职支部书记供电所数</span></div>
+              <div class="kpi"><strong id="citySupervisorTotal">0</strong><span>廉洁监督员人数</span></div>
+              <div class="kpi"><strong id="cityAssessmentPeriodsTotal">0</strong><span>清廉指数考评期数</span></div>
               <div class="kpi"><strong id="cityFiveOnceTotal">0</strong><span>累计开展五个一次数</span></div>
             </div>
 
@@ -961,8 +1010,9 @@
                     <th>破零供电所数量</th>
                     <th>挂点调研</th>
                     <th>一对一谈话</th>
-                    <th>签字把关</th>
-                    <th>受考评员工数量</th>
+                    <th>专职支部书记供电所数</th>
+                    <th>廉洁监督员人数</th>
+                    <th>清廉指数考评期数</th>
                     <th>累计开展五个一次数</th>
                     <th>填报进度</th>
                     <th>状态</th>
@@ -1004,12 +1054,12 @@
 
     const data = {
       qingchuan: [
-        { name: "竹园供电所", formPeople: 2, leaderResearch: 3, talkPeople: 5, signOff: 8, assessedEmployees: 24, fiveOnce: 4 },
-        { name: "乔庄供电所", formPeople: 1, leaderResearch: 2, talkPeople: 3, signOff: 6, assessedEmployees: 18, fiveOnce: 3 }
+        { name: "竹园供电所", formPeople: 2, leaderResearch: 3, talkPeople: 5, branchSecretary: 1, supervisorNames: "李明、王芳", assessmentPeriods: 2, fiveOnce: 4 },
+        { name: "乔庄供电所", formPeople: 1, leaderResearch: 2, talkPeople: 3, branchSecretary: 0, supervisorNames: "张强", assessmentPeriods: 1, fiveOnce: 3 }
       ],
       shiqu: [
-        { name: "城东供电所", formPeople: 3, leaderResearch: 4, talkPeople: 6, signOff: 9, assessedEmployees: 31, fiveOnce: 5 },
-        { name: "中心营业供电所", formPeople: 2, leaderResearch: 3, talkPeople: 4, signOff: 7, assessedEmployees: 27, fiveOnce: 4 }
+        { name: "城东供电所", formPeople: 3, leaderResearch: 4, talkPeople: 6, branchSecretary: 1, supervisorNames: "赵敏、陈洁", assessmentPeriods: 3, fiveOnce: 5 },
+        { name: "中心营业供电所", formPeople: 2, leaderResearch: 3, talkPeople: 4, branchSecretary: 1, supervisorNames: "刘洋", assessmentPeriods: 2, fiveOnce: 4 }
       ]
     };
 
@@ -1036,6 +1086,25 @@
       return Math.max(0, Number(document.getElementById(id).value || 0));
     }
 
+    function binaryValue(id) {
+      return Math.min(1, Math.max(0, Number(document.getElementById(id).value || 0))) > 0 ? 1 : 0;
+    }
+
+    function countNames(names) {
+      return String(names || "")
+        .split(/[、，,\s]+/)
+        .map((name) => name.trim())
+        .filter(Boolean).length;
+    }
+
+    function updateSupervisorNameCount() {
+      document.getElementById("supervisorNameCount").textContent = `已填 ${countNames(document.getElementById("supervisorNames").value)} 人`;
+    }
+
+    function normalizeBranchSecretaryInput() {
+      document.getElementById("branchSecretaryCount").value = binaryValue("branchSecretaryCount");
+    }
+
     function totals(list) {
       return list.reduce((sum, item) => ({
         office: sum.office + 1,
@@ -1043,10 +1112,11 @@
         breakZeroOffice: sum.breakZeroOffice + (item.formPeople > 0 ? 1 : 0),
         leaderResearch: sum.leaderResearch + item.leaderResearch,
         talkPeople: sum.talkPeople + item.talkPeople,
-        signOff: sum.signOff + item.signOff,
-        assessedEmployees: sum.assessedEmployees + item.assessedEmployees,
+        branchSecretary: sum.branchSecretary + (item.branchSecretary === 1 ? 1 : 0),
+        supervisorCount: sum.supervisorCount + countNames(item.supervisorNames),
+        assessmentPeriods: sum.assessmentPeriods + item.assessmentPeriods,
         fiveOnce: sum.fiveOnce + item.fiveOnce
-      }), { office: 0, formPeople: 0, breakZeroOffice: 0, leaderResearch: 0, talkPeople: 0, signOff: 0, assessedEmployees: 0, fiveOnce: 0 });
+      }), { office: 0, formPeople: 0, breakZeroOffice: 0, leaderResearch: 0, talkPeople: 0, branchSecretary: 0, supervisorCount: 0, assessmentPeriods: 0, fiveOnce: 0 });
     }
 
     function setView(viewName) {
@@ -1068,8 +1138,9 @@
       document.getElementById("breakZeroOfficeTotal").textContent = sum.breakZeroOffice;
       document.getElementById("leaderResearchTotal").textContent = sum.leaderResearch;
       document.getElementById("talkPeopleTotal").textContent = sum.talkPeople;
-      document.getElementById("signOffTotal").textContent = sum.signOff;
-      document.getElementById("assessedEmployeesTotal").textContent = sum.assessedEmployees;
+      document.getElementById("branchSecretaryTotal").textContent = sum.branchSecretary;
+      document.getElementById("supervisorTotal").textContent = sum.supervisorCount;
+      document.getElementById("assessmentPeriodsTotal").textContent = sum.assessmentPeriods;
       document.getElementById("fiveOnceTotal").textContent = sum.fiveOnce;
       document.getElementById("statusPill").textContent = account.status;
 
@@ -1086,8 +1157,9 @@
           <td>${item.formPeople}</td>
           <td>${item.leaderResearch}</td>
           <td>${item.talkPeople}</td>
-          <td>${item.signOff}</td>
-          <td>${item.assessedEmployees}</td>
+          <td>${item.branchSecretary === 1 ? "有" : "无"}</td>
+          <td>${countNames(item.supervisorNames)}人｜${item.supervisorNames || "未填"}</td>
+          <td>${item.assessmentPeriods}</td>
           <td>${item.fiveOnce}</td>
           <td>
             <button class="text-btn" type="button" data-edit="${index}">编辑</button>
@@ -1110,8 +1182,9 @@
       document.getElementById("cityBreakZeroOfficeTotal").textContent = sum.breakZeroOffice;
       document.getElementById("cityLeaderResearchTotal").textContent = sum.leaderResearch;
       document.getElementById("cityTalkPeopleTotal").textContent = sum.talkPeople;
-      document.getElementById("citySignOffTotal").textContent = sum.signOff;
-      document.getElementById("cityAssessedEmployeesTotal").textContent = sum.assessedEmployees;
+      document.getElementById("cityBranchSecretaryTotal").textContent = sum.branchSecretary;
+      document.getElementById("citySupervisorTotal").textContent = sum.supervisorCount;
+      document.getElementById("cityAssessmentPeriodsTotal").textContent = sum.assessmentPeriods;
       document.getElementById("cityFiveOnceTotal").textContent = sum.fiveOnce;
 
       document.getElementById("cityRows").innerHTML = keys.map((key) => {
@@ -1125,8 +1198,9 @@
             <td>${unitTotal.breakZeroOffice}</td>
             <td>${unitTotal.leaderResearch}</td>
             <td>${unitTotal.talkPeople}</td>
-            <td>${unitTotal.signOff}</td>
-            <td>${unitTotal.assessedEmployees}</td>
+            <td>${unitTotal.branchSecretary}</td>
+            <td>${unitTotal.supervisorCount}</td>
+            <td>${unitTotal.assessmentPeriods}</td>
             <td>${unitTotal.fiveOnce}</td>
             <td><span class="progress"><span class="bar"><i style="width:${progress}%"></i></span>${progress}%</span></td>
             <td class="${accounts[key].status === "已提交" ? "ok" : "warn"}">${accounts[key].status}</td>
@@ -1146,9 +1220,11 @@
       document.getElementById("formPeopleCount").value = item.formPeople;
       document.getElementById("leaderResearchCount").value = item.leaderResearch;
       document.getElementById("talkPeopleCount").value = item.talkPeople;
-      document.getElementById("signOffCount").value = item.signOff;
-      document.getElementById("assessedEmployeesCount").value = item.assessedEmployees;
+      document.getElementById("branchSecretaryCount").value = item.branchSecretary === 1 ? 1 : 0;
+      document.getElementById("supervisorNames").value = item.supervisorNames || "";
+      document.getElementById("assessmentPeriodsCount").value = item.assessmentPeriods;
       document.getElementById("fiveOnceCount").value = item.fiveOnce;
+      updateSupervisorNameCount();
       document.getElementById("saveOfficeBtn").textContent = "保存供电所信息";
     }
 
@@ -1159,9 +1235,11 @@
       document.getElementById("formPeopleCount").value = 0;
       document.getElementById("leaderResearchCount").value = 0;
       document.getElementById("talkPeopleCount").value = 0;
-      document.getElementById("signOffCount").value = 0;
-      document.getElementById("assessedEmployeesCount").value = 0;
+      document.getElementById("branchSecretaryCount").value = 0;
+      document.getElementById("supervisorNames").value = "";
+      document.getElementById("assessmentPeriodsCount").value = 0;
       document.getElementById("fiveOnceCount").value = 0;
+      updateSupervisorNameCount();
       document.getElementById("saveOfficeBtn").textContent = "保存供电所信息";
     }
 
@@ -1173,9 +1251,11 @@
       document.getElementById("formPeopleCount").value = lastMonthDraft.formPeople;
       document.getElementById("leaderResearchCount").value = lastMonthDraft.leaderResearch;
       document.getElementById("talkPeopleCount").value = lastMonthDraft.talkPeople;
-      document.getElementById("signOffCount").value = lastMonthDraft.signOff;
-      document.getElementById("assessedEmployeesCount").value = lastMonthDraft.assessedEmployees;
+      document.getElementById("branchSecretaryCount").value = lastMonthDraft.branchSecretary === 1 ? 1 : 0;
+      document.getElementById("supervisorNames").value = lastMonthDraft.supervisorNames || "";
+      document.getElementById("assessmentPeriodsCount").value = lastMonthDraft.assessmentPeriods;
       document.getElementById("fiveOnceCount").value = lastMonthDraft.fiveOnce;
+      updateSupervisorNameCount();
     }
 
     document.getElementById("loginForm").addEventListener("submit", (event) => {
@@ -1217,6 +1297,10 @@
       loadOfficeIntoForm(Number(officeSelect.value));
     });
 
+    document.getElementById("supervisorNames").addEventListener("input", updateSupervisorNameCount);
+    document.getElementById("branchSecretaryCount").addEventListener("input", normalizeBranchSecretaryInput);
+    document.getElementById("branchSecretaryCount").addEventListener("change", normalizeBranchSecretaryInput);
+
     function openAddOfficeModal() {
       newOfficeName.value = "";
       addOfficeModal.classList.add("active");
@@ -1232,7 +1316,7 @@
     function confirmAddOffice() {
       const name = newOfficeName.value.trim();
       if (!name) return;
-      data[currentAccount].push({ name, formPeople: 0, leaderResearch: 0, talkPeople: 0, signOff: 0, assessedEmployees: 0, fiveOnce: 0 });
+      data[currentAccount].push({ name, formPeople: 0, leaderResearch: 0, talkPeople: 0, branchSecretary: 0, supervisorNames: "", assessmentPeriods: 0, fiveOnce: 0 });
       editingIndex = data[currentAccount].length - 1;
       lastMonthDraft = { ...data[currentAccount][editingIndex] };
       closeAddOfficeModal();
@@ -1266,8 +1350,9 @@
         formPeople: numberValue("formPeopleCount"),
         leaderResearch: numberValue("leaderResearchCount"),
         talkPeople: numberValue("talkPeopleCount"),
-        signOff: numberValue("signOffCount"),
-        assessedEmployees: numberValue("assessedEmployeesCount"),
+        branchSecretary: binaryValue("branchSecretaryCount"),
+        supervisorNames: document.getElementById("supervisorNames").value.trim(),
+        assessmentPeriods: numberValue("assessmentPeriodsCount"),
         fiveOnce: numberValue("fiveOnceCount")
       };
       if (!item.name) return;
